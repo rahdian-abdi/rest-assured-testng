@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite1" verbose="1" >
+    <test name="Get" >
+        <classes>
+            <class name="reqres.testcase.get.GetAllUser" />
+            <class name="reqres.testcase.get.GetSingleUser" />
+        </classes>
+    </test>
+    <test name="Post">
+        <classes>
+            <class name="reqres.testcase.post.PostCreateUser"/>
+        </classes>
+    </test>
+    <test name="Update">
+        <classes>
+            <class name="reqres.testcase.update.PutUpdateUser"/>
+        </classes>
+    </test>
+    <test name="Delete">
+        <classes>
+            <class name="reqres.testcase.delete.DeleteUser"/>
+        </classes>
+    </test>
+</suite>
