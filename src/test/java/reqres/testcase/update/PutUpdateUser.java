@@ -1,5 +1,6 @@
 package reqres.testcase.update;
 
+import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.json.simple.JSONObject;
 import org.testng.annotations.AfterMethod;
@@ -15,6 +16,7 @@ public class PutUpdateUser {
     public void setUp(){
         String dir = System.getProperty("user.dir");
         path = dir+"/src/test/java/reqres/jsonschema/get";
+
     }
     @AfterMethod
     public void tearDown(){
@@ -24,14 +26,15 @@ public class PutUpdateUser {
     public void updateUser(int user){
         String url = "https://reqres.in/api/users/"+user;
 
-        JSONObject json = new JSONObject();
-        json.put("name", "afina");
-        json.put("job", "lecturer");
+        JSONObject request = new JSONObject();
+        request.put("name", "afina");
+        request.put("job", "lecturer");
 
-        given().body(json)
-                .when().put(url)
-                .then()
-                .statusCode(200)
-                .body("$", Matchers.hasKey("updatedAt"));
+        given().body(request).
+                header("Content-Type", "application/json").
+                contentType(ContentType.JSON).
+        when().put(url).
+        then().statusCode(200)
+              .body("$", Matchers.hasKey("updatedAt"));
     }
 }

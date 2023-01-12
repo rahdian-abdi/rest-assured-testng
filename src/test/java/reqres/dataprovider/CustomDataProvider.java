@@ -28,4 +28,9 @@ public class CustomDataProvider {
         Object[][] data = {{"users"}, {"userzz"}, {"usher"}};
         return data;
     }
+    @DataProvider(name = "CreateUser")
+    public Object[][] postCreateUser(){
+        Object[][] data = {{"dian", "software engineer in test"}, {"caca", "lecturer"}};
+        return data;
+    }
 }

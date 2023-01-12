@@ -1,5 +1,6 @@
 package reqres.testcase.get;
 
+import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -19,8 +20,8 @@ public class GetSingleUser {
     @BeforeMethod
     public void setUp(){
         String DIR = System.getProperty("user.dir");
-        String PATH = DIR+"/src/test/java/reqres/jsonschema/get/";
-        JSON_SCHEMA = new File(PATH+"GetSingleUser.json");
+        String PATH = DIR+"/src/test/resources/reqres/jsonschema/get";
+        JSON_SCHEMA = new File(PATH+"/GetSingleUser.json");
 
         URL = "https://reqres.in/api/users/";
         INVALID_URL = "https://reqres.in/api/users/";
@@ -33,29 +34,30 @@ public class GetSingleUser {
     public void getSingleUser(int id){
         switch (id){
             case 2:
-                given()
-                        .when().get(URL+id)
-                        .then().statusCode(200)
-                                .body("data.email", Matchers.equalTo("janet.weaver@reqres.in"))
-                                .body(JsonSchemaValidator.matchesJsonSchema(JSON_SCHEMA));
+                given().header("Content-Type", "application/json")
+                       .contentType(ContentType.JSON).
+                when().get(URL+id).
+                then().statusCode(200)
+                      .body("data.email", Matchers.equalTo("janet.weaver@reqres.in"))
+                      .body(JsonSchemaValidator.matchesJsonSchema(JSON_SCHEMA));
                 break;
             case 1:
-                given().get(URL+id)
-                        .then()
-                        .statusCode(200)
-                        .body("data.email", Matchers.equalTo("george.bluth@reqres.in"));
+                given().header("Content-Type", "application/json").contentType(ContentType.JSON).
+                when().get(URL+id).
+                then().statusCode(200)
+                      .body("data.email", Matchers.equalTo("george.bluth@reqres.in"));
                 break;
             default:
-                given().get(URL+id)
-                        .then()
-                        .statusCode(404);
+                given().header("Content-Type", "application/json").
+                when().get(URL+id).
+                then().statusCode(404);
         }
     }
     @Test(dataProvider = "InvalidUserId", dataProviderClass = CustomDataProvider.class)
     public void getSingleUserInvalidId(String id){
-        given().when()
-                .get(INVALID_URL+id)
-                .then()
-                .statusCode(404);
+        given().header("Content-Type", "application/json").
+                contentType(ContentType.JSON).
+        when().get(INVALID_URL+id).
+        then().statusCode(404);
     }
 }

@@ -7,11 +7,13 @@ import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
 
 public class DeleteUser {
-    public String path;
+    public String PATH;
+    public String URL;
     @BeforeMethod
     public void setUp(){
         String dir = System.getProperty("user.dir");
-        path = dir+"/src/test/java/reqres/jsonschema/get";
+        PATH = dir+"/src/test/java/reqres/jsonschema/get";
+        URL = "https://reqres.in/api/users/2";
     }
     @AfterMethod
     public void tearDown(){
@@ -19,9 +21,8 @@ public class DeleteUser {
     }
     @Test
     public void deleteUser(){
-        String url = "https://reqres.in/api/users/2";
-        given().delete(url)
-                .then()
-                .statusCode(204);
+        given()
+                .when().delete(URL)
+                .then().statusCode(204);
     }
 }
