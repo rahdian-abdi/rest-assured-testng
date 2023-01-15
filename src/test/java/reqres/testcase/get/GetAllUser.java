@@ -4,16 +4,31 @@ import static io.restassured.RestAssured.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static org.hamcrest.Matchers.*;
 
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.markuputils.ExtentColor;
+import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.aventstack.extentreports.model.Report;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
+import reqres.ReportBase;
 import reqres.dataprovider.CustomDataProvider;
 import java.io.File;
 
-public class GetAllUser {
-    public File JSON_SCHEMA;
-    public String URL;
-    public String INVALID_URL;
+public class GetAllUser extends ReportBase{
+    private File JSON_SCHEMA;
+    private String URL;
+    private String INVALID_URL;
+    @BeforeTest
+    public void setUpExtent(){
+        generateReport();
+    }
+    @AfterTest
+    public void tearDownExtent(){
+        flush();
+    }
     @BeforeMethod
     public void setUp(){
         String DIR = System.getProperty("user.dir");
@@ -24,10 +39,12 @@ public class GetAllUser {
         INVALID_URL = "https://reqres.in/api/userspage=1";
     }
     @AfterMethod
-    public void tearDown(){
+    public void tearDown(ITestResult result) throws Exception {
+        generateHtml(result);
     }
     @Test(dataProvider = "ValidPage", dataProviderClass = CustomDataProvider.class)
     public void getAllUser(int page){
+        extentTest = extentReports.createTest("Get All User With Valid Page");
         switch (page){
             case 2:
                 given().header("Content-Type", "application/json")
@@ -57,6 +74,7 @@ public class GetAllUser {
     }
     @Test(dataProvider = "InvalidPage", dataProviderClass = CustomDataProvider.class)
     public void getAllUserInvalidPage(String page){
+        extentTest = extentReports.createTest("Get All User With Invalid Page");
         given().
         when().get(URL+page).
         then().
@@ -65,6 +83,7 @@ public class GetAllUser {
     }
     @Test
     public void getAllUserWrongUrl(){
+        extentTest = extentReports.createTest("Get All User With Invalid Url");
         given()
                 .when().get(INVALID_URL)
                 .then().statusCode(404);

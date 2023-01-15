@@ -22,6 +22,6 @@ public class BaseUri {
         given().header("Content-Type", "application/json").
                 contentType(ContentType.JSON).
         when().get("/users/2").
-        then().statusCode(200).body("data.first_name", containsString("Janet"));
+        then().statusCode(200).body("data.first_name", containsString("Janets"));
     }
 }

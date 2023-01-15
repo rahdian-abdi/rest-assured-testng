@@ -11,7 +11,7 @@ import reqres.dataprovider.CustomDataProvider;
 import static io.restassured.RestAssured.*;
 
 public class PutUpdateUser {
-    public String path;
+    private String path;
     @BeforeMethod
     public void setUp(){
         String dir = System.getProperty("user.dir");
