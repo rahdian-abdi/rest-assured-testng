@@ -16,6 +16,8 @@ public class PostAndGetAuth {
     private String LOGIN;
     private String TOKEN;
     private String GET_AUTH;
+    private JsonPath jsonPath;
+    private String body;
 
     @BeforeMethod
     public void setUp(){
@@ -30,13 +32,16 @@ public class PostAndGetAuth {
                             when().post(LOGIN).
                             then().statusCode(200).extract().response();
 
-        JsonPath jsonPath = response.jsonPath();
+        int statusCode = response.statusCode();
+        System.out.println("The Status Code is : " + statusCode);
+
+        jsonPath = response.jsonPath();
         TOKEN = jsonPath.get("token");
 
     }
     @AfterMethod
     public void tearDown(){
-
+        System.out.println(body);
     }
     @Test
     public void loginValidation(){
@@ -44,10 +49,9 @@ public class PostAndGetAuth {
         Response response = given().header("Authorization", TOKEN).contentType(ContentType.JSON).
                             when().get(GET_AUTH).
                             then().body("products.title", Matchers.hasItem("iPhone 9")).
-                            body("$", Matchers.hasKey("products")).
+                                   body("products", Matchers.hasSize(30)).
                             extract().response();
 
-        String body = response.asPrettyString();
-        System.out.println(body);
+        body = response.asPrettyString();
     }
 }
