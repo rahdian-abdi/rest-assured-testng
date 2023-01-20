@@ -22,4 +22,14 @@
             <class name="reqres.testcase.delete.DeleteUser"/>
         </classes>
     </test>
+    <test name="Login">
+        <groups>
+            <run>
+                <include name="login" />
+            </run>
+        </groups>
+        <classes>
+            <class name="reqres.testcase.post.PostAndGetAuth"></class>
+        </classes>
+    </test>
 </suite>

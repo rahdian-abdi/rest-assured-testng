@@ -6,9 +6,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.json.simple.JSONObject;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static io.restassured.RestAssured.*;
 
@@ -19,7 +17,7 @@ public class PostAndGetAuth {
     private JsonPath jsonPath;
     private String body;
 
-    @BeforeMethod
+    @BeforeGroups(groups = "login")
     public void setUp(){
         LOGIN = "https://dummyjson.com/auth/login";
         GET_AUTH = "https://dummyjson.com/auth/products";
@@ -39,11 +37,11 @@ public class PostAndGetAuth {
         TOKEN = jsonPath.get("token");
 
     }
-    @AfterMethod
+    @AfterGroups(groups = "login")
     public void tearDown(){
         System.out.println(body);
     }
-    @Test
+    @Test(groups = "login")
     public void loginValidation(){
 
         Response response = given().header("Authorization", TOKEN).contentType(ContentType.JSON).
